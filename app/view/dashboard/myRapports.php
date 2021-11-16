@@ -47,11 +47,12 @@
           <th scope="col">ID</th>
           <th scope='col'>Médecin</th>
           <th scope="col">Date</th>
-          <th scope="col">Motif</th>
+          <th scope="col" style='width: 45%;'>Motif</th>
           <th scope="col">Bilan</th>
           <th scope='col'></th>
         </tr> 
       </thead>
+      
       <tbody>
       <?php if(isset($_GET['date'])) { ?>
         <?php $rapports = RapportController::getRapportByDateAndID($_GET['date'], $_SESSION['id_VISITOR']); ?>
@@ -69,34 +70,61 @@
           <?php } ?>
         <?php } else { ?>
           <div class='p-1'></div>
-          <h5>Vous n'avez aucun rapport(s) à cette date.</h5>
+          <div class="alert alert-danger d-flex align-items-center" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+            <div>
+              Vous n'avez aucun rapport(s) à cette date.
+            </div>
+          </div>
           <div class='p-2'></div>
         <?php } ?>
       <?php } elseif(isset($_GET['medic'])) { ?>
         <?php $rapports = RapportController::getEveryRapportOfAMedic($_GET['medic'], $_SESSION['id_VISITOR']); ?>
-        <?php foreach($rapports as $key => $val) { ?>
-          <?php $medecin = MedecinController::getMedicByID($val->getIDMedecin()); ?>
-          <tr>
-              <td><?= $val->getID(); ?></td>
-              <td><?= $medecin->getNom() . ' ' . $medecin->getPrenom(); ?></td>
-              <td><?= $val->getDate(); ?></td>
-              <td><?= $val->getBilan(); ?></td>
-              <td><?= $val->getMotif(); ?></td>
-              <td><a href='./?action=myRapports&page=<?= $_GET['page']; ?>&editRapport=<?= $val->getID(); ?>'>Éditer</a></td>
-          </tr>
+        <?php if(!empty($rapports)) { ?>
+          <?php foreach($rapports as $key => $val) { ?>
+            <?php $medecin = MedecinController::getMedicByID($val->getIDMedecin()); ?>
+            <tr>
+                <td><?= $val->getID(); ?></td>
+                <td><?= $medecin->getNom() . ' ' . $medecin->getPrenom(); ?></td>
+                <td><?= $val->getDate(); ?></td>
+                <td><?= $val->getBilan(); ?></td>
+                <td><?= $val->getMotif(); ?></td>
+                <td><a href='./?action=myRapports&page=<?= $_GET['page']; ?>&editRapport=<?= $val->getID(); ?>'>Éditer</a></td>
+            </tr>
+          <?php } ?>
+        <?php } else { ?>
+          <div class='p-1'></div>
+          <div class="alert alert-danger d-flex align-items-center" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+            <div>
+              Il n'y a aucun rapport concernant ce médecin.
+            </div>
+          </div>
+          <div class='p-2'></div>
         <?php } ?>
       <?php } else { ?>
         <?php $rapports = RapportController::getEveryRapportFrom($_SESSION['id_VISITOR']); ?>
-        <?php foreach($rapports as $key => $val) { ?>
-          <?php $medecin = MedecinController::getMedicByID($val->getIDMedecin()); ?>
-          <tr>
-              <td><?= $val->getID(); ?></td>
-              <td><?= $medecin->getNom() . ' ' . $medecin->getPrenom(); ?></td>
-              <td><?= $val->getDate(); ?></td>
-              <td><?= $val->getBilan(); ?></td>
-              <td><?= $val->getMotif(); ?></td>
-              <td><a href='./?action=myRapports&page=<?= $_GET['page']; ?>&editRapport=<?= $val->getID(); ?>'>Éditer</a></td>
-          </tr>
+        <?php if(!empty($rapports)) { ?>
+          <?php foreach($rapports as $key => $val) { ?>
+            <?php $medecin = MedecinController::getMedicByID($val->getIDMedecin()); ?>
+            <tr>
+                <td><?= $val->getID(); ?></td>
+                <td><?= $medecin->getNom() . ' ' . $medecin->getPrenom(); ?></td>
+                <td><?= $val->getDate(); ?></td>
+                <td><?= $val->getBilan(); ?></td>
+                <td><?= $val->getMotif(); ?></td>
+                <td><a href='./?action=myRapports&page=<?= $_GET['page']; ?>&editRapport=<?= $val->getID(); ?>'>Éditer</a></td>
+            </tr>
+          <?php } ?>
+        <?php } else { ?>
+          <div class='p-1'></div>
+          <div class="alert alert-danger d-flex align-items-center" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+            <div>
+              Vous n'avez encore aucun rapport(s).
+            </div>
+          </div>
+          <div class='p-2'></div>
         <?php } ?>
       <?php } ?>
       </tbody>
@@ -142,13 +170,17 @@
           </div>
 
           <!-- Motif -->
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon1"><i class="bi bi-clipboard fs-5"></i></span>
-            <input name='rapport_Motif' type="text" class="form-control" placeholder="Motif" aria-label="Motif" required>
+          <div class="input-group  mb-3">
+            <label class="input-group-text" for="inputGroupSelect01"><i class="bi bi-clipboard fs-5"></i></label>
+            <select name='rapport_Motif' class="form-select" required>
+              <?php foreach(RapportController::getEveryMotifs() as $key => $val) { ?> 
+                <option value="<?= $val ?>"><?= $val; ?></option>
+              <?php } ?>
+            </select>
           </div>
 
           <!-- Bilan -->
-          <div class="input-group  mb-3">
+          <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon1"><i class="bi bi-journal-medical fs-5"></i></span>
             <input name='rapport_Bilan' type="text" class="form-control" placeholder="Bilan" aria-label="Bilan" required>
           </div>
@@ -281,9 +313,17 @@
             </div>
 
             <!-- Motif -->
-            <div class="input-group mb-3">
-              <span class="input-group-text" id="basic-addon1"><i class="bi bi-clipboard fs-5"></i></span>
-              <input name='rapport_Motif_edit' type="text" class="form-control" placeholder='Motif' value="<?= $rapport->getMotif(); ?>" aria-label="Motif" required>
+            <div class="input-group  mb-3">
+              <label class="input-group-text" for="inputGroupSelect01"><i class="bi bi-clipboard fs-5"></i></label>
+              <select name='rapport_Motif_edit' class="form-select" required>
+                <?php foreach(RapportController::getEveryMotifs() as $key => $val) { ?> 
+                  <?php if($val == $rapport->getMotif()) { ?>
+                    <option selected value="<?= $rapport->getMotif() ?>"><?= $rapport->getMotif(); ?></option>
+                  <?php } else { ?>
+                    <option value="<?= $val ?>"><?= $val; ?></option>
+                  <?php } ?>
+                <?php } ?>
+              </select>
             </div>
 
             <!-- Bilan -->

@@ -79,8 +79,8 @@
             return $rapport_collection;
         }
 
-        public static function getEveryRapportOfAMedic($id_medic, $id_visitor) : array {
-            $rapports = RapportAccess::getEveryRapportOfAMedic($id_medic, $id_visitor);
+        public static function getEveryRapportOfAMedic($id_medic) : array {
+            $rapports = RapportAccess::getEveryRapportOfAMedic($id_medic);
 
             return $rapports;
         }
@@ -95,6 +95,12 @@
             $rapport = RapportAccess::getRapportByID($id_rapport);
 
             return $rapport;
+        }
+
+        public static function getEveryMotifs() : array {
+            $motifs = RapportAccess::getEveryMotifs();
+
+            return $motifs;
         }
 
         public static function getInstance() : object {

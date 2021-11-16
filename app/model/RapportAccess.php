@@ -68,13 +68,26 @@
             return $collection;
         }
 
-        public static function getEveryRapportOfAMedic($id_medic, $id_visitor) : array {
-            $request = self::prepare('SELECT * FROM Rapport WHERE idMedecin = :id_medic AND idVisiteur = :id_visitor ORDER BY date DESC;', array(':id_medic' => $id_medic, ':id_visitor' => $id_visitor));
+        public static function getEveryRapportOfAMedic($id_medic) : array {
+            $request = self::prepare('SELECT * FROM Rapport WHERE idMedecin = :id_medic ORDER BY date DESC;', array(':id_medic' => $id_medic));
             $collection = array();
 
             if(!empty($request)) {
                 foreach($request as $rows) {
                     $collection[$rows['id']] = new Rapport($rows['id'], $rows['date'], $rows['motif'], $rows['bilan'], $rows['idVisiteur'], $rows['idMedecin']);
+                }
+            }
+
+            return $collection;
+        }
+
+        public static function getEveryMotifs() : array {
+            $request = self::query('SELECT DISTINCT motif FROM Rapport LIMIT 6;');
+            $collection = array();
+
+            if(!empty($request)) {
+                foreach($request as $rows) {
+                    $collection[] = $rows['motif'];
                 }
             }
 
