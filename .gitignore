@@ -1,3 +1,5 @@
 .DS_Store
 app/.DS_Store
 resources/.DS_Store
+* linguist-vendored
+*.php linguist-vendored=false
