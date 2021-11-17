@@ -159,8 +159,17 @@
               <div class='col-6'>
                 <div class="input-group  mb-3">
                   <span class="input-group-text" id="basic-addon1"><i class="bi bi-telephone fs-5"></i></span>
-                  <input name='medic_PhoneEdit' type="text" class="form-control" placeholder='Téléphone' maxlength="10" value="<?= $medic->getTel(); ?>" aria-label="Téléphone" required>
+                  <input name='medic_PhoneEdit' type="text" class="form-control" placeholder='Téléphone' maxlength="10" onkeypress='return checkIfNumeric(event)' value="<?= $medic->getTel(); ?>" aria-label="Téléphone" required>
                 </div>
+                <script>
+                  function checkIfNumeric(evt) { 
+                      var ASCIICode = (evt.which) ? evt.which : evt.keyCode;
+                      if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57)) {
+                          return false; 
+                      }
+                      return true; 
+                  }        
+                </script>
               </div>
             </div>
 

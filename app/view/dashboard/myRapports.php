@@ -89,7 +89,9 @@
                 <td><?= $val->getDate(); ?></td>
                 <td><?= $val->getBilan(); ?></td>
                 <td><?= $val->getMotif(); ?></td>
-                <td><a href='./?action=myRapports&page=<?= $_GET['page']; ?>&editRapport=<?= $val->getID(); ?>'>Éditer</a></td>
+                <?php if($val->getIDVisiteur() == $_SESSION['id_VISITOR']) { ?>
+                  <td><a href='./?action=myRapports&page=<?= $_GET['page']; ?>&editRapport=<?= $val->getID(); ?>'>Éditer</a></td>
+                <?php } ?>
             </tr>
           <?php } ?>
         <?php } else { ?>

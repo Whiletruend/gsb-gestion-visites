@@ -59,7 +59,7 @@
                     <button type="button" class="btn btn-primary btn-lg px-4 me-sm-3">Comment ça fonctionne ?</button>
 
                     <?php if(VisiteurController::isConnected()) { ?>
-                      <a href='./?action=myRapports'><button type="button" class="btn btn-outline-secondary btn-lg px-4">Tableau de bord</button></a>
+                      <a href='./?action=myRapports&page=1'><button type="button" class="btn btn-outline-secondary btn-lg px-4">Tableau de bord</button></a>
                     <?php } else { ?>
                       <a href='./?action=login'><button type="button" class="btn btn-outline-secondary btn-lg px-4">Se connecter</button></a>
                     <?php } ?>
